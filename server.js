@@ -17,22 +17,23 @@ async function init() {
                 // [req.query.search]
             ),
             client.query("SELECT * FROM boards WHERE board_id = $1", [
-                // req.query.search,
-                39,
+                req.query.search,
             ]),
         ]);
         res
             .json({
                 status: "ok",
                 board: boardRes.rows[0] || {},
-                // posts: commentsRes.rows,
-                posts: commentsRes,
+                posts: commentsRes.rows,
             })
             .end();
         await client.end();
     });
 
+    const PORT = process.env.PORT || 3000;
     app.use(express.static("./static"));
-    app.listen(process.env.PORT || 3000);
+    app.listen(PORT);
+
+    console.log(`running on http://localhost:${PORT}`);
 }
 init();
